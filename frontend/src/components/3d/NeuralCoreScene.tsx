@@ -57,16 +57,13 @@ const SlowMovingSpaceParticles: React.FC<{ count?: number }> = ({ count = 1600 }
 
 export const NeuralCoreScene: React.FC = () => {
   return (
-    <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden">
-      {/* Large Center Radial Glow: Cyan/Blue */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] center-radial-glow rounded-full blur-[110px] pointer-events-none animate-pulse-glow" />
-
+    <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden flex items-center justify-center">
       <Canvas
         camera={{ position: [0, 0, 8], fov: 55 }}
         className="absolute inset-0 w-full h-full"
       >
-        <ambientLight intensity={0.6} />
-        <pointLight position={[10, 10, 10]} intensity={1} color="#00E5FF" />
+        <ambientLight intensity={0.8} />
+        <pointLight position={[0, 0, 5]} intensity={1.5} color="#00E5FF" />
 
         <SlowMovingSpaceParticles count={1600} />
       </Canvas>

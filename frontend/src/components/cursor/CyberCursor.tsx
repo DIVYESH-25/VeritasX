@@ -23,6 +23,7 @@ export const CyberCursor: React.FC = () => {
   const ringPosRef = useRef({ x: -100, y: -100 });
   const particlesRef = useRef<Particle[]>([]);
   const [isVisible, setIsVisible] = useState(false);
+  const isFirstMoveRef = useRef(true);
 
   useEffect(() => {
     // Activate custom cursor on fine pointers
@@ -55,6 +56,10 @@ export const CyberCursor: React.FC = () => {
 
     const onMouseMove = (e: MouseEvent) => {
       posRef.current = { x: e.clientX, y: e.clientY };
+      if (isFirstMoveRef.current) {
+        ringPosRef.current = { x: e.clientX, y: e.clientY };
+        isFirstMoveRef.current = false;
+      }
       if (!isVisible) setIsVisible(true);
 
       // Spawn subtle trail particle in signature cyan on mouse move

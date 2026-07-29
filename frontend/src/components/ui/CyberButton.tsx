@@ -59,10 +59,6 @@ export const CyberButton: React.FC<CyberButtonProps> = ({
       onMouseLeave={resetCursor}
       className={`group relative inline-flex items-center justify-center font-semibold transition-all duration-300 rounded-sm uppercase ${getVariantStyles()} ${getSizeStyles()} ${className}`}
     >
-      {/* Corner Bracket Details */}
-      <span className="absolute -top-[1px] -left-[1px] w-1.5 h-1.5 border-t border-l border-cyan-400 transition-all group-hover:w-2.5 group-hover:h-2.5" />
-      <span className="absolute -bottom-[1px] -right-[1px] w-1.5 h-1.5 border-b border-r border-cyan-400 transition-all group-hover:w-2.5 group-hover:h-2.5" />
-
       {icon && <span className="mr-2 transition-transform duration-300 group-hover:scale-110">{icon}</span>}
       <span>{children}</span>
     </motion.button>

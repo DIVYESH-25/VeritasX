@@ -45,7 +45,7 @@
   text-shadow: 0 0 15px rgba(0, 229, 255, 0.7), 0 0 30px rgba(0, 229, 255, 0.4);
 }
 
-/* Large Center Radial Gradient Glow */
+/* Center Radial Gradient Glow - Disabled */
 .center-radial-glow {
-  background: radial-gradient(circle at center, rgba(0, 229, 255, 0.35) 0%, rgba(0, 119, 255, 0.15) 50%, transparent 75%);
+  background: transparent;
 }

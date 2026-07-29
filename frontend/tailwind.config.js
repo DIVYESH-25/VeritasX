@@ -27,8 +27,8 @@ export default {
       },
       keyframes: {
         pulseGlow: {
-          '0%, 100%': { opacity: '0.6', transform: 'scale(1)' },
-          '50%': { opacity: '0.9', transform: 'scale(1.05)' },
+          '0%, 100%': { opacity: '0.7', transform: 'translate(-50%, -50%) scale(1)' },
+          '50%': { opacity: '1', transform: 'translate(-50%, -50%) scale(1.15)' },
         },
       },
     },
