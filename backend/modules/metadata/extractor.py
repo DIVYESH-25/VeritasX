@@ -313,10 +313,12 @@ class MetadataExtractor:
         :param img: Pillow image object.
         :return: Compression type string or ``None``.
         """
+        val = None
         if hasattr(img, "compression") and img.compression:
-            return img.compression
-        # Check info dict
-        return img.info.get("compression")
+            val = img.compression
+        elif "compression" in img.info:
+            val = img.info.get("compression")
+        return safe_str(val) if val is not None else None
 
     @staticmethod
     def _get_dpi(img: Image.Image) -> Optional[tuple[float, float]]:

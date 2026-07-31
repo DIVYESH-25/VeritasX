@@ -4,6 +4,7 @@ import { Upload, Scan, ArrowLeft, AlertTriangle, CheckCircle, Sparkles, X, Shiel
 import { GlassCard } from '@/components/ui/GlassCard';
 import { useCursorState } from '@/hooks/useCursorState';
 import { MetadataAnalysisPanel, ModuleResultData } from '@/components/sections/MetadataAnalysisPanel';
+import { ErrorLevelAnalysisPanel, ElaModuleResultData } from '@/components/sections/ErrorLevelAnalysisPanel';
 
 export interface UploadedMediaItem {
   id: string;
@@ -18,6 +19,7 @@ export interface UploadedMediaItem {
     status: string;
     aggregated_result: any;
     metadataResult?: ModuleResultData;
+    elaResult?: ElaModuleResultData;
   } | null;
 }
 
@@ -87,6 +89,9 @@ export const BatchDetectionWorkspace: React.FC<BatchDetectionWorkspaceProps> = (
       const metadataModule = (responseJson.modules || []).find(
         (m: any) => m.module === 'Metadata Analysis'
       );
+      const elaModule = (responseJson.modules || []).find(
+        (m: any) => m.module === 'Error Level Analysis'
+      );
 
       setItems((prev) =>
         prev.map((it) =>
@@ -100,6 +105,7 @@ export const BatchDetectionWorkspace: React.FC<BatchDetectionWorkspaceProps> = (
                   status: responseJson.status,
                   aggregated_result: responseJson.aggregated_result,
                   metadataResult: metadataModule,
+                  elaResult: elaModule,
                 },
               }
             : it
@@ -256,7 +262,7 @@ export const BatchDetectionWorkspace: React.FC<BatchDetectionWorkspaceProps> = (
                 <div className="flex items-center gap-3">
                   {item.isScanning && (
                     <span className="font-mono text-xs text-[#00E5FF] flex items-center gap-2 animate-pulse">
-                      <Scan className="w-4 h-4 animate-spin" /> ANALYZING METADATA...
+                      <Scan className="w-4 h-4 animate-spin" /> ANALYZING METADATA & ELA...
                     </span>
                   )}
 
@@ -278,6 +284,14 @@ export const BatchDetectionWorkspace: React.FC<BatchDetectionWorkspaceProps> = (
               {/* Render Metadata Analysis Panel when complete */}
               {item.orchestratorData?.metadataResult && (
                 <MetadataAnalysisPanel moduleResult={item.orchestratorData.metadataResult} />
+              )}
+
+              {/* Render Error Level Analysis Panel when complete */}
+              {item.orchestratorData?.elaResult && (
+                <ErrorLevelAnalysisPanel
+                  moduleResult={item.orchestratorData.elaResult}
+                  originalImageUrl={item.url}
+                />
               )}
             </div>
           ))}

@@ -63,21 +63,29 @@ class ForensicAggregator:
             risk_level = "CRITICAL" if weighted_score >= 0.88 else "HIGH"
             summary = (
                 f"High confidence detection of AI manipulation ({round(weighted_score * 100, 1)}% synthetic likelihood) "
-                f"across {successful_count}/{active_count} forensic engines."
+                f"across {successful_count}/{active_count} forensic engines. "
+                f"This assessment is currently based only on Metadata Analysis and Error Level Analysis. "
+                f"Additional forensic modules will be incorporated in future versions. "
+                f"This is not a final AI detection result."
             )
         elif weighted_score <= 0.30:
             verdict = "REAL"
             risk_level = "LOW"
             summary = (
                 f"Media exhibits organic sensor & compression characteristics consistent with authentic capture "
-                f"({round((1 - weighted_score) * 100, 1)}% authenticity likelihood)."
+                f"({round((1 - weighted_score) * 100, 1)}% authenticity likelihood). "
+                f"This assessment is currently based only on Metadata Analysis and Error Level Analysis. "
+                f"Additional forensic modules will be incorporated in future versions. "
+                f"This is not a final AI detection result."
             )
         else:
             verdict = "UNCERTAIN"
             risk_level = "MEDIUM"
             summary = (
                 f"Inconclusive forensic markers ({round(weighted_score * 100, 1)}% synthetic likelihood). "
-                f"Further manual inspection recommended."
+                f"This assessment is currently based only on Metadata Analysis and Error Level Analysis. "
+                f"Additional forensic modules will be incorporated in future versions. "
+                f"This is not a final AI detection result."
             )
 
         return AggregatedResult(

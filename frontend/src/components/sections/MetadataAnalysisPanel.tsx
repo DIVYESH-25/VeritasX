@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   FileText,
@@ -112,30 +112,30 @@ export const MetadataAnalysisPanel: React.FC<MetadataAnalysisPanelProps> = ({ mo
   const [isExpanded, setIsExpanded] = useState<boolean>(true);
   const [copiedField, setCopiedField] = useState<string | null>(null);
 
-  const payload = moduleResult.data || {};
-  const file = payload.file || {};
-  const image = payload.image || {};
-  const exif = payload.exif || {};
-  const validation = payload.validation || {};
-  const observations = payload.observations || [];
+  const payload = useMemo(() => moduleResult.data || {}, [moduleResult.data]);
+  const file = useMemo(() => payload.file || {}, [payload.file]);
+  const image = useMemo(() => payload.image || {}, [payload.image]);
+  const exif = useMemo(() => payload.exif || {}, [payload.exif]);
+  const validation = useMemo(() => payload.validation || {}, [payload.validation]);
+  const observations = useMemo(() => payload.observations || [], [payload.observations]);
 
-  const metadataScore = payload.metadata_score ?? (1 - (moduleResult.score || 0));
-  const confidenceScore = payload.confidence_score ?? moduleResult.confidence ?? 0;
+  const metadataScore = useMemo(() => payload.metadata_score ?? (1 - (moduleResult.score || 0)), [payload.metadata_score, moduleResult.score]);
+  const confidenceScore = useMemo(() => payload.confidence_score ?? moduleResult.confidence ?? 0, [payload.confidence_score, moduleResult.confidence]);
 
   // Format file size
-  const formatFileSize = (bytes?: number): string => {
+  const formatFileSize = useCallback((bytes?: number): string => {
     if (!bytes) return 'Not Available';
     if (bytes >= 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
     if (bytes >= 1024) return `${(bytes / 1024).toFixed(1)} KB`;
     return `${bytes} Bytes`;
-  };
+  }, []);
 
   // Copy to clipboard helper
-  const handleCopy = (text: string, fieldName: string) => {
+  const handleCopy = useCallback((text: string, fieldName: string) => {
     navigator.clipboard.writeText(text);
     setCopiedField(fieldName);
     setTimeout(() => setCopiedField(null), 2000);
-  };
+  }, []);
 
   // Metadata Verdict Determination (Metadata-specific)
   const getMetadataVerdict = () => {
@@ -223,10 +223,11 @@ export const MetadataAnalysisPanel: React.FC<MetadataAnalysisPanelProps> = ({ mo
             <FileText className="w-6 h-6" />
           </div>
           <div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <h3 className="font-orbitron text-lg font-bold text-slate-100 tracking-wide">
                 METADATA ANALYSIS
               </h3>
+              <CyberBadge label="Completed" variant="emerald" pulse={false} />
               <CyberBadge label={verdict.label} variant={verdict.variant} pulse={true} />
             </div>
             <p className="font-mono text-xs text-slate-400 mt-0.5">

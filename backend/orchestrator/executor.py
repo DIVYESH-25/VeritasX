@@ -39,8 +39,11 @@ class AsyncModuleExecutor:
         logger.info(f"[{request_id}] Dispatching {len(modules)} forensic modules concurrently...")
         start_time = time.perf_counter()
 
-        # Create coroutine tasks for each active module
-        tasks = [mod.execute(image_data, request_id) for mod in modules]
+        # Create tasks for each active module offloaded to threads for true parallelism
+        def _run_sync(module: IForensicModule) -> ModuleResult:
+            return asyncio.run(module.execute(image_data, request_id))
+
+        tasks = [asyncio.to_thread(_run_sync, mod) for mod in modules]
 
         # Execute concurrently with return_exceptions=True for total error isolation
         raw_results = await asyncio.gather(*tasks, return_exceptions=True)
