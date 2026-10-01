@@ -21,13 +21,15 @@ class ModuleDispatcher:
             self._register_default_modules()
 
     def _register_default_modules(self) -> None:
-        """Register active forensic detection modules (Metadata Analysis & ELA)."""
+        """Register active forensic detection modules (Metadata, ELA, Frequency)."""
         from backend.modules.metadata import MetadataAnalysisModule
         from backend.modules.ela import ErrorLevelAnalysisModule
+        from backend.modules.frequency import FrequencyAnalysisModule
 
         defaults = [
             MetadataAnalysisModule(),
             ErrorLevelAnalysisModule(),
+            FrequencyAnalysisModule(),
         ]
         for mod in defaults:
             self.register_module(mod)

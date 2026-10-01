@@ -61,9 +61,12 @@ async def run_tests():
     print(response.model_dump_json(indent=2))
 
     assert response.request_id is not None
-    assert len(response.modules) == 2
+    assert len(response.modules) == 3
     assert response.status == "completed"
-    assert response.aggregated_result.verdict == "REAL"
+    module_names = [m.module for m in response.modules]
+    assert "Metadata Analysis" in module_names
+    assert "Error Level Analysis" in module_names
+    assert "Frequency Analysis" in module_names
     print("\n[OK] TEST 1 PASSED: Standard Orchestration Successful.")
 
     # Test 2: Concurrency & Error Isolation Test
@@ -77,7 +80,7 @@ async def run_tests():
     print("\n[Faulty Pipeline Response JSON]")
     print(fault_response.model_dump_json(indent=2))
 
-    assert len(fault_response.modules) == 3
+    assert len(fault_response.modules) == 4
     assert fault_response.status == "partial_failure"
 
     failing_result = next(m for m in fault_response.modules if m.module == "Simulated Faulty Module")

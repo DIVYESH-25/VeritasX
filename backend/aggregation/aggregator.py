@@ -58,13 +58,17 @@ class ForensicAggregator:
         overall_confidence = round(min(max(overall_confidence, 0.0), 1.0), 4)
 
         # Categorical Verdict Determination
+        module_list = ", ".join(
+            m.module for m in successful_results
+        )
         if weighted_score >= 0.70:
             verdict = "AI_GENERATED"
             risk_level = "CRITICAL" if weighted_score >= 0.88 else "HIGH"
             summary = (
                 f"High confidence detection of AI manipulation ({round(weighted_score * 100, 1)}% synthetic likelihood) "
-                f"across {successful_count}/{active_count} forensic engines. "
-                f"This assessment is currently based only on Metadata Analysis and Error Level Analysis. "
+                f"across {successful_count}/{active_count} forensic engines ({module_list}). "
+                f"This assessment is based on the currently implemented modules: "
+                f"Metadata Analysis, Error Level Analysis, and Frequency Analysis. "
                 f"Additional forensic modules will be incorporated in future versions. "
                 f"This is not a final AI detection result."
             )
@@ -74,7 +78,8 @@ class ForensicAggregator:
             summary = (
                 f"Media exhibits organic sensor & compression characteristics consistent with authentic capture "
                 f"({round((1 - weighted_score) * 100, 1)}% authenticity likelihood). "
-                f"This assessment is currently based only on Metadata Analysis and Error Level Analysis. "
+                f"This assessment is based on the currently implemented modules: "
+                f"Metadata Analysis, Error Level Analysis, and Frequency Analysis. "
                 f"Additional forensic modules will be incorporated in future versions. "
                 f"This is not a final AI detection result."
             )
@@ -83,7 +88,8 @@ class ForensicAggregator:
             risk_level = "MEDIUM"
             summary = (
                 f"Inconclusive forensic markers ({round(weighted_score * 100, 1)}% synthetic likelihood). "
-                f"This assessment is currently based only on Metadata Analysis and Error Level Analysis. "
+                f"This assessment is based on the currently implemented modules: "
+                f"Metadata Analysis, Error Level Analysis, and Frequency Analysis. "
                 f"Additional forensic modules will be incorporated in future versions. "
                 f"This is not a final AI detection result."
             )
